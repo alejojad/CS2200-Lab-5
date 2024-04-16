@@ -38,7 +38,7 @@ private:
   /** search for "it" in subarray items[left...right], return the 
    * index of "it" in the array if found; otherwise, return -1 
    */
-  int binary_search (const ItemType & it, int left, int right) {
+  int binary_search (const ItemType & it, int left, int right) const {
        //base cases 
        if (left>right)
           return -1;
@@ -97,16 +97,46 @@ public:
  * Remove and return the i-th item from the sorted list.
  */
 template <typename ItemType> 
-ItemType SortedAList<ItemType>::remove(int i) {
+ItemType SortedAList<ItemType>::remove(int i) 
+{
   // TODO:
+  ItemType removedItem = items[i];
+    
+    for (int j = i; j < count - 1; j++) 
+    {
+        items[j] = items[j + 1];
+    }
+    count--;
+    
+    return removedItem;
 }
 
 /**
  * Put "it" into the "items" array while ensuring that "items" are sorted.
  */
 template <typename ItemType>
-void SortedAList<ItemType>::put(const ItemType &it) {
+void SortedAList<ItemType>::put(const ItemType &it) 
+{
   // TODO:
+  if (count == maxCnt) 
+  {
+      resize(maxCnt * RFACTOR); 
+  }
+
+  int insertIndex = 0;
+  
+  while (insertIndex < count && items[insertIndex] < it) 
+  {
+      insertIndex++;
+  }
+
+  for (int j = count; j > insertIndex; j--) 
+  {
+      items[j] = items[j - 1];
+  }
+  
+  items[insertIndex] = it;
+  count++; // Increment the count
 }
 
 /** 
@@ -116,7 +146,8 @@ void SortedAList<ItemType>::put(const ItemType &it) {
 template <typename ItemType>
 int SortedAList<ItemType>::find (const ItemType & it) const
 {
-  //TODO: 
+  //TODO:
+  return binary_search(it, 0, count - 1);
 }
 } // namespace ds
 
